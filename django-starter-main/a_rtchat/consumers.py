@@ -129,11 +129,12 @@ class OnlineStatusConsumer(WebsocketConsumer):
         
     def online_status_handler(self, event):
         online_users = self.group.users_online.exclude(id=self.user.id)
-        public_chat_users = ChatGroup.objects.get(group_name = 'public-chat').users_online.exclude(id=self.user.id)
+        public_chat_group = ChatGroup.objects.get(group_name='Public-chat')
+        public_chat_users = public_chat_group.users_online.exclude(id=self.user.id)
         
         my_chats = self.user.chat_groups.all()
         private_charts_with_users = [chat for chat in my_chats.filter(is_private = True) if chat.users_online.exclude(id=self.user.id)]
-        group_charts_with_users = [chat for chat in my_chats.filter(groupchat_name_isnull = False) if chat.users_online.exclude(id=self.user.id)]
+        group_charts_with_users = [chat for chat in my_chats.filter(groupchat_name__isnull = False ) if chat.users_online.exclude(id=self.user.id)]
         
         if public_chat_users or private_charts_with_users or group_charts_with_users:
             online_in_chats = True

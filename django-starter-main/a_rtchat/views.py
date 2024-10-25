@@ -27,7 +27,7 @@ def chat_view(request , chatroom_name = 'Public-chat'):
             
     if chat_group.groupchat_name:
         if request.user not in chat_group.members.all():
-            if request.user.emailaddress_set.filter(verified= True):
+            if request.user.emailaddress_set.filter(verified= True).exists():
                 chat_group.members.add(request.user)
             else:
                 messages.warning(request, 'You need to varify you email to join the chat!')
@@ -51,13 +51,14 @@ def chat_view(request , chatroom_name = 'Public-chat'):
        'form' : form,
        'other_user' : other_user,
        'chatroom_name' : chatroom_name,
+       'chat_group' : chat_group
     }
     
     return render(request, 'a_rtchat/chat.html', context)
 
 @login_required
 def get_or_create_chatroom(request , username):
-    if request.user.username == username:
+    if request.user.username == username:   
         return redirect('home')
     
     other_user = User.objects.get(username=username)
@@ -136,7 +137,7 @@ def chatroom_delete_view(request, chatroom_name):
     return render(request, 'a_rtchat/chatroom_delete.html', {'chat_group' : chat_group})
 
 
-
+@login_required
 def chatroom_leave_view(request, chatroom_name):
     chat_group = get_object_or_404(ChatGroup , group_name = chatroom_name)
     if request.user not in chat_group.members.all():

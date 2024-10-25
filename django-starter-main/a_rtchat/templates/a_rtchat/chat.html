@@ -15,6 +15,7 @@
             </svg>
         </div>
     </a>
+    {% comment %} {% endif %} {% endcomment %}
     </div>
     {% endif %}
     <div id="chat_window" class="h-[45rem] flex flex-col bg-gray-800 rounded-2xl shadow-2xl relative p-1">
@@ -31,8 +32,7 @@
                 </div>
             </a>
             {% elif chat_group.groupchat_name %}
-            <ul>
-                
+            <ul> 
                 {% for member  in chat_group.member.all %}
                 <li>
                     <a href="{% url 'profile' member.username %}" class=" flex flex-col text-gray-400 items-center justify-center w-20 gap-2">
@@ -44,7 +44,7 @@
                             <div class= "gray-dot border-2 border-gray-800 absolute bottom-0 right-0"></div>
                             {% endif %}
                                 
-                            <img src="{{member.profile.avatar}}" class = " w-14 h-14 rounded-full object-cover">
+                            <img src="{{member.profile.avatar}}" class = " w-14 h-14 rounded-full object-cover" />
                         </div>
                         {{ member.profile.name| slice:":10" }}
                     </a>
@@ -113,7 +113,7 @@
         setTimeout(function() {
             const container = document.getElementById('chat_container');
             container.scrollTop = container.scrollHeight;
-        },);
+        }, time);
        
     }
     scrollToBottom()
